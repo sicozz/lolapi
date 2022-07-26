@@ -1,0 +1,21 @@
+version: '3'
+
+networks:
+    lolapi:
+        driver: bridge                  # Needed to get around a bug at connection
+services:
+    loldb:
+        image: 'mysql:8'
+        environment:
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        networks:
+            - lolapi
+        ports:
+        - '3306:3306'
+    redisdb:
+        image: 'redis:7'
+        networks:
+            - lolapi
+        ports:
+        - '6379:6379'
