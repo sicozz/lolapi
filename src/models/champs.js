@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../services/database');
 
-// Champ table definition
+// Champ table
 const Champ = sequelize.define(
   'champ',
   {
@@ -9,6 +9,14 @@ const Champ = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
       primaryKey: true
+    },
+
+    version: {
+      type: Sequelize.STRING
+    },
+
+    title: {
+      type: Sequelize.STRING
     },
 
     attack: {
