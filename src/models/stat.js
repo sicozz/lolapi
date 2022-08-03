@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../services/database');
+const Champion = require('./champion');
 
 // Champs stats table
 const Stat = sequelize.define(
@@ -10,6 +11,15 @@ const Stat = sequelize.define(
       allowNull: false,
       autoIncrement: true,
       primaryKey: true
+    },
+
+    championId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'champions',
+        key: 'id'
+      }
     },
 
     name: {
@@ -99,14 +109,25 @@ const Stat = sequelize.define(
   },
   {
     timestamps: false,
-    associate: models => {
-      // This method sems to never be executed
-      Stat.belongsTo(models.champion, {
-        foreignKey: 'id',
-      });
-      return Stat;
-    }
+    // associate: models => {
+    //   // This method sems to never be executed
+    //   Stat.belongsTo(models.champion, {
+    //     foreignKey: 'id',
+    //   });
+    //   return Stat;
+    // }
   }
 );
+
+// Stat.associate = models => {
+//   Stat.hasOne(models.champion, {
+//     foreignKey: 'championId',
+//   });
+//   return Stat;
+// };
+
+// Stat.belongsTo(Champion, {
+//   foreignKey: 'id',
+// });
 
 module.exports = Stat;

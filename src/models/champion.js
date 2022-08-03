@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../services/database');
-const StatDAO = require('./stat');
+const Stat = require('./stat');
 
 // Champ table
 const Champion = sequelize.define(
@@ -54,8 +54,16 @@ const Champion = sequelize.define(
   }
 );
 
-Champion.hasOne(StatDAO, {
-  foreignKey: 'id',
+// Champion.associate = models => {
+//   Champion.hasOne(models.stat, {
+//     foreignKey: 'championId',
+//     onDelete: 'CASCADE'
+//   });
+//   return Champion;
+// };
+
+Champion.hasOne(Stat, {
+  foreignKey: 'championId',
   onDelete: 'CASCADE'
 });
 

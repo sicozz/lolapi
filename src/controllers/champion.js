@@ -43,6 +43,8 @@ exports.addChamp = async (req, res, next) => {
 
   try {
     const championInfo = await ChampionDAO.create(newChampInfo);
+    console.log(`=== CHAMPIONID: ${championInfo.id}`);
+    newChampStats.championId = championInfo.id;
     const championStats = await StatDAO.create(newChampStats);
     const champion = Object.assign({}, championInfo, championStats);
     const values = champion.dataValues;
