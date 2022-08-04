@@ -34,44 +34,14 @@ const validProperties = new Set([
   "attackspeed"
 ]);
 
-// const redisClient = Redis.createClient(6379, '127.0.0.1');
-
-/*
- * The fields of interest are:
- * name
- * version
- * title
- * info.attack
- * info.defense
- * info.magic
- * info.difficulty
- * stats.hp
- * stats.hpperlevel
- * stats.mp
- * stats.mpperlevel
- * stats.movespeed
- * stats.armor
- * stats.armorperlevel
- * stats.spellblock
- * stats.spellblockperlevel
- * stats.attackrange
- * stats.hpregen
- * stats.hpregenperlevel
- * stats.mpregen
- * stats.mpregenperlevel
- * stats.crit
- * stats.critperlevel
- * stats.attackdamage
- * stats.attackdamageperlevel
- * stats.attackspeedperlevel
- * stats.attackspeed
- */
+const redisClient = Redis.createClient(6379, '127.0.0.1');
 
 const openingRg = /^.*[{|\[)]$/;
 const closingRg = /^\s*(?:}|\]),?$/;
 const propertyRg = /\s+"([^":]+)/;
 const valueRg = /\s*"[^:]+:\s"?([^",{\[]+)/;
 
+let lineNum = 0;
 let stack = 0;
 const loadedChampions = [];
 let currChampion = {};
@@ -83,18 +53,8 @@ const file = readline.createInterface({
 });
 
 file.on('line', line => {
-  // If closing brace pop state
-  //
-  // If state empty then push a champion
-  // If state champion check the attribute
-  // // If attribute is in base interest -> add it
-  // // If attribute is info -> push info to state
-  // // If attribute is stats -> push stats to state
-  // // Else -> pass
-  // If state info -> add attribute
-  // If state stats -> add attribute
+  lineNum++;
 
-  // First line special case
   if (line == "{") {
     return
   }
@@ -111,7 +71,10 @@ file.on('line', line => {
 
     // Inject 10 loaded champions
     if (loadedChampions.length == 10) {
-      console.log("Injection time");
+      for (champion of loadedChampions) {
+        redisClient.set(champion.name, champion.version);
+      }
+      redisClient.set("lastLoadedLine", lineNum);
       loadedChampions.splice(0, loadedChampions.length);
     }
   }
@@ -134,8 +97,14 @@ file.on('line', line => {
       currChampion[property] = value;
     }
   }
-})
+});
 
 file.on('close', () => {
   console.log(`There are ${loadedChampions.length} champions to inject`);
+  for (champion of loadedChampions) {
+    redisClient.set(champion.name, champion.version);
+  }
+  redisClient.set("lastLoadedLine", lineNum);
+  loadedChampions.splice(0, loadedChampions.length);
+  redisClient.quit();
 });
