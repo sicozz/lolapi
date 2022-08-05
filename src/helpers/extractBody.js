@@ -15,7 +15,6 @@ exports.extractChampStats = req => ({
   attackdamage: Number(req.body.attackdamage),
   attackdamageperlevel: Number(req.body.attackdamageperlevel),
   attackrange: Number(req.body.attackrange),
-  attackspeedoffset: Number(req.body.attackspeedoffset),
   attackspeedperlevel: Number(req.body.attackspeedperlevel),
   crit: Number(req.body.crit),
   critperlevel: Number(req.body.critperlevel),

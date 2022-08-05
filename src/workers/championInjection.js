@@ -1,7 +1,9 @@
 // Inject champions from champion.json into loldb
-const Redis = require('redis');
 const fs = require('fs');
 const readline = require('readline');
+
+const Redis = require('redis');
+const axios = require('axios');
 
 const filePath = './champion.json'
 const validProperties = new Set([
@@ -30,6 +32,7 @@ const validProperties = new Set([
   "critperlevel",
   "attackdamage",
   "attackdamageperlevel",
+  "attackspeedoffset",
   "attackspeedperlevel",
   "attackspeed"
 ]);
@@ -73,6 +76,7 @@ file.on('line', line => {
     if (loadedChampions.length == 10) {
       for (champion of loadedChampions) {
         redisClient.set(champion.name, champion.version);
+        const resp = axios.post('http://localhost:3000/champion', champion);
       }
       redisClient.set("lastLoadedLine", lineNum);
       loadedChampions.splice(0, loadedChampions.length);
@@ -100,9 +104,10 @@ file.on('line', line => {
 });
 
 file.on('close', () => {
-  console.log(`There are ${loadedChampions.length} champions to inject`);
+  console.log(`There are ${loadedChampions.length} champions left to inject`);
   for (champion of loadedChampions) {
     redisClient.set(champion.name, champion.version);
+    axios.post('http://localhost:3000/champion', champion);
   }
   redisClient.set("lastLoadedLine", lineNum);
   loadedChampions.splice(0, loadedChampions.length);

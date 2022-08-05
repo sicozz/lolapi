@@ -16,6 +16,7 @@ const errorController = require('./controllers/error');
 
 const app = express();
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(routeURIs.championRoute, championRoutes);

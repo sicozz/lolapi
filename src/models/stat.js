@@ -99,10 +99,6 @@ const Stat = sequelize.define(
       type: Sequelize.FLOAT
     },
 
-    attackspeedoffset: {
-      type: Sequelize.FLOAT
-    },
-
     attackspeedperlevel: {
       type: Sequelize.FLOAT
     }
