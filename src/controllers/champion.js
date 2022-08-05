@@ -1,6 +1,17 @@
+const axios = require('axios');
+
 const ChampionDAO = require('../models/champion');
 const StatDAO = require('../models/stat');
-const { extractChampInfo, extractChampStats } = require('../helpers/extractBody');
+const {
+  extractChampInfo,
+  extractChampStats,
+  extractRemoteChamp
+} = require('../helpers/extractBody');
+
+// RIOT DEVELOPER PORTAL API
+const riotChampReq = (championName, version) =>
+  `http://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion/${championName}.json`;
+const riotVersions = "https://ddragon.leagueoflegends.com/api/versions.json";
 
 // Retrieve every champion from  db
 exports.getAllChamps = async (req, res, next) => {
@@ -38,16 +49,30 @@ exports.getChamp = async (req, res, next) => {
 
 // Create a new champion
 exports.addChamp = async (req, res, next) => {
-  const newChampInfo = extractChampInfo(req);
-  const newChampStats = extractChampStats(req);
+  const newChampInfo = extractChampInfo(req.body);
+  const newChampStats = extractChampStats(req.body);
 
   try {
-    // CHECK IF IT ALREADY EXISTS
+    const champion = await ChampionDAO.findOne({
+      where: { name: newChampInfo.name },
+      include: { model: StatDAO, required: true }
+    });
+    if (champion) {
+      return res.status(409).json(
+        `Champion with name: ${newChampInfo.name} already exists`
+      );
+    }
+
     const championInfo = await ChampionDAO.create(newChampInfo);
+
     newChampStats.championId = championInfo.id;
     const championStats = await StatDAO.create(newChampStats);
-    const champion = Object.assign({}, championInfo, championStats);
-    const values = champion.dataValues;
+
+    const values = Object.assign(
+      {},
+      championInfo.dataValues,
+      championStats.dataValues
+    );
     return res.status(201).json(values);
   } catch (err) {
     console.error(err);
@@ -58,20 +83,23 @@ exports.addChamp = async (req, res, next) => {
 // Update champion
 exports.updateChamp = async (req, res, next) => {
   const championName = req.body.name;
-  const newInfo = extractChampInfo(req);
-  const newStats = extractChampStats(req);
+  const newChampInfo = extractChampInfo(req.body);
+  const newChampStats = extractChampStats(req.body);
 
   try {
-    // Check if the champion does exist
-    const currInfo = await ChampionDAO.findOne({ where: { name: championName } });
-    const currStats = await StatDAO.findOne({ where: { name: championName } });
+    const currInfo = await ChampionDAO.findOne({
+      where: { name: championName }
+    });
+    const currStats = await StatDAO.findOne({
+      where: { name: championName }
+    });
     if (!currInfo || !currStats) {
       return res.status(404).json(
         `Could not find champion with name: ${championName}`
       );
     }
-    await currInfo.update(newInfo, { where: { name: championName } });
-    await currStats.update(newStats, { where: { name: championName } });
+    await currInfo.update(newChampInfo, { where: { name: championName } });
+    await currStats.update(newChampStats, { where: { name: championName } });
     return res.status(201).json(`${championName} was updated`);
   } catch (err) {
     console.error(err);
@@ -84,8 +112,9 @@ exports.deleteChamp = async (req, res, next) => {
   const championName = req.params.name;
 
   try {
-    // Check if the champion does exist
-    const champion = await ChampionDAO.findOne({ where: { name: championName } });
+    const champion = await ChampionDAO.findOne({
+      where: { name: championName }
+    });
     if (!champion) {
       return res.status(404).json(
         `Could not find champion with name: ${championName}`
@@ -99,3 +128,54 @@ exports.deleteChamp = async (req, res, next) => {
     return res.status(500).json(error);
   }
 };
+
+// Refresh champion and retrieve the info
+exports.refreshChamp = async (req, res, next) => {
+  const riotResp = await axios.get(riotVersions);
+  const latestVersion = riotResp.data[0];
+  const championName = req.params.name;
+
+  try {
+    const champion = await ChampionDAO.findOne({
+      where: { name: championName }
+    });
+
+    const remoteChampion = await axios.get(
+      riotChampReq(championName, latestVersion)
+    );
+
+    if (!champion || champion.version != latestVersion) {
+      const newChamp = extractRemoteChamp(remoteChampion.data, championName);
+      const newChampInfo = extractChampInfo(newChamp);
+      const newChampStats = extractChampStats(newChamp);
+
+      try {
+        const currInfo = await ChampionDAO.findOne({
+          where: { name: championName }
+        });
+        const currStats = await StatDAO.findOne({
+          where: { name: championName }
+        });
+
+        if (!currInfo || !currStats) {
+          const championInfo = await ChampionDAO.create(newChampInfo);
+
+          newChampStats.championId = championInfo.id;
+          await StatDAO.create(newChampStats);
+        } else {
+          await currInfo.update(newChampInfo, { where: { name: championName } });
+          await currStats.update(newChampStats, { where: { name: championName } });
+        }
+        console.log(`${championName} was refreshed`);
+        return res.status(201).json(newChamp);
+      } catch (err) {
+        console.error(err);
+        return res.status(500).json(err);
+      }
+    }
+    return res.status(302).json(champion);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err);
+  }
+}

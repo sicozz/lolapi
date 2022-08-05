@@ -13,4 +13,7 @@ router
   .get('/:name', champsController.getChamp)
   .delete('/:name', champsController.deleteChamp);
 
+router
+  .get('/refresh/:name', champsController.refreshChamp);
+
 module.exports = router;
