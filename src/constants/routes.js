@@ -1,6 +1,7 @@
+// URLs to route the endpoints
 const routeURIs = {
-  championRoute: '/champion',
-  statRoute: '/stat'
+  champion: '/champion',
+  stat: '/stat'
 };
 
 export default routeURIs;

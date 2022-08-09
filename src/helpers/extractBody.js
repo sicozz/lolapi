@@ -45,9 +45,3 @@ export const extractRemoteChamp = (riotResp, champName) => {
     },
   );
 };
-
-// export default {
-//   extractChampInfo,
-//   extractChampStats,
-//   extractRemoteChamp
-// };

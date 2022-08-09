@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 
-import sequelize from '../services/database.js';
-import Champion from './champion.js';
+import sequelize from '../services/sql/database.js';
+// import Champion from './champion.js';
 
 // Champs stats table
 const Stat = sequelize.define(

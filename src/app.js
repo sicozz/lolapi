@@ -2,14 +2,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import 'dotenv/config';
-// import dotenv from 'dotenv';
-// dotenv.config();
 
 // Constants
 import routeURIs from './constants/routes.js';
 
 // DB init
-import sequelize from './services/database.js';
+import sequelize from './services/sql/database.js';
 
 // Routes
 import championRoutes from './routes/champion.js';
@@ -21,8 +19,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(routeURIs.championRoute, championRoutes);
-app.use(routeURIs.statRoute, statRoutes);
+app.use(routeURIs.champion, championRoutes);
+app.use(routeURIs.stat, statRoutes);
 
 app.use(errorController.get404);
 

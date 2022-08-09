@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 
-// Lol db connection as root user
+// MYSQL db connection
 const sequelize = new Sequelize(
   process.env.MYSQL_DB,
   process.env.MYSQL_USER,

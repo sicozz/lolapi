@@ -1,11 +1,10 @@
-import StatDAO from '../models/stat.js';
+import StatDAO from '../services/sql/stat.js';
 
-const getStats = async (req, res, next) => {
+const getStats = async (req, res) => {
   const championName = req.params.name;
 
   try {
-    const championStats = await StatDAO.findOne({ where: { name: championName } });
-
+    const championStats = await StatDAO.findByName(championName);
     if (!championStats) {
       return res.status(404).json(
         `Could not find stats of champion with name: ${championName}`
