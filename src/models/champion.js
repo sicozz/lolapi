@@ -1,6 +1,7 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../services/database');
-const Stat = require('./stat');
+import Sequelize from 'sequelize';
+
+import sequelize from '../services/database.js';
+import Stat from './stat.js';
 
 // Champ table
 const Champion = sequelize.define(
@@ -67,4 +68,4 @@ Champion.hasOne(Stat, {
   onDelete: 'CASCADE'
 });
 
-module.exports = Champion;
+export default Champion;

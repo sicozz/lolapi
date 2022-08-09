@@ -1,12 +1,12 @@
-const axios = require('axios');
+import axios from 'axios';
 
-const ChampionDAO = require('../models/champion');
-const StatDAO = require('../models/stat');
-const {
+import ChampionDAO from '../models/champion.js';
+import StatDAO from '../models/stat.js';
+import {
   extractChampInfo,
   extractChampStats,
   extractRemoteChamp
-} = require('../helpers/extractBody');
+} from '../helpers/extractBody.js';
 
 // RIOT DEVELOPER PORTAL API
 const riotChampReq = (championName, version) =>
@@ -14,7 +14,7 @@ const riotChampReq = (championName, version) =>
 const riotVersions = "https://ddragon.leagueoflegends.com/api/versions.json";
 
 // Retrieve every champion from  db
-exports.getAllChamps = async (req, res, next) => {
+const getAllChamps = async (req, res, next) => {
   try {
     const allChamps = await ChampionDAO.findAll({
       include: { model: StatDAO, required: true }
@@ -27,7 +27,7 @@ exports.getAllChamps = async (req, res, next) => {
 };
 
 // Query a champion with an specific id
-exports.getChamp = async (req, res, next) => {
+const getChamp = async (req, res, next) => {
   const championName = req.params.name;
 
   try {
@@ -48,7 +48,7 @@ exports.getChamp = async (req, res, next) => {
 };
 
 // Create a new champion
-exports.addChamp = async (req, res, next) => {
+const addChamp = async (req, res, next) => {
   const newChampInfo = extractChampInfo(req.body);
   const newChampStats = extractChampStats(req.body);
 
@@ -81,7 +81,7 @@ exports.addChamp = async (req, res, next) => {
 };
 
 // Update champion
-exports.updateChamp = async (req, res, next) => {
+const updateChamp = async (req, res, next) => {
   const championName = req.body.name;
   const newChampInfo = extractChampInfo(req.body);
   const newChampStats = extractChampStats(req.body);
@@ -108,7 +108,7 @@ exports.updateChamp = async (req, res, next) => {
 };
 
 // Delete champion
-exports.deleteChamp = async (req, res, next) => {
+const deleteChamp = async (req, res, next) => {
   const championName = req.params.name;
 
   try {
@@ -130,14 +130,15 @@ exports.deleteChamp = async (req, res, next) => {
 };
 
 // Refresh champion and retrieve the info
-exports.refreshChamp = async (req, res, next) => {
+const refreshChamp = async (req, res, next) => {
   const riotResp = await axios.get(riotVersions);
   const latestVersion = riotResp.data[0];
   const championName = req.params.name;
 
   try {
     const champion = await ChampionDAO.findOne({
-      where: { name: championName }
+      where: { name: championName },
+      include: { model: StatDAO, required: true }
     });
 
     const remoteChampion = await axios.get(
@@ -178,4 +179,13 @@ exports.refreshChamp = async (req, res, next) => {
     console.error(err);
     return res.status(500).json(err);
   }
+};
+
+export default {
+  getAllChamps,
+  getChamp,
+  addChamp,
+  updateChamp,
+  deleteChamp,
+  refreshChamp
 }

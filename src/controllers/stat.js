@@ -1,7 +1,6 @@
-const StatDAO = require('../models/stat');
-const { extractChampStats } = require('../helpers/extractBody');
+import StatDAO from '../models/stat.js';
 
-exports.getStats = async (req, res, next) => {
+const getStats = async (req, res, next) => {
   const championName = req.params.name;
 
   try {
@@ -18,3 +17,7 @@ exports.getStats = async (req, res, next) => {
     return res.status(500).json(err);
   }
 };
+
+export default {
+  getStats
+}

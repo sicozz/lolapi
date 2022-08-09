@@ -1,18 +1,20 @@
 // Node modules
-const express = require('express');
-const bodyParser = require('body-parser');
-require('dotenv').config();
+import express from 'express';
+import bodyParser from 'body-parser';
+import 'dotenv/config';
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 // Constants
-const routeURIs = require('./constants/routes');
+import routeURIs from './constants/routes.js';
 
 // DB init
-const sequelize = require('./services/database');
+import sequelize from './services/database.js';
 
 // Routes
-const championRoutes = require('./routes/champion');
-const statRoutes = require('./routes/stat');
-const errorController = require('./controllers/error');
+import championRoutes from './routes/champion.js';
+import statRoutes from './routes/stat.js';
+import errorController from './controllers/error.js';
 
 const app = express();
 

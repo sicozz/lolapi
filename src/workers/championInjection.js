@@ -1,41 +1,41 @@
 // Inject champions from champion.json into loldb
-const fs = require('fs');
-const readline = require('readline');
+import fs from 'fs';
+import readline from 'readline';
 
-const Redis = require('redis');
-const axios = require('axios');
+import Redis from 'redis';
+import axios from 'axios';
 
 const filePath = './champion.json'
-const validProperties = new Set([
-  "name",
-  "version",
-  "title",
-  "attack",
-  "defense",
-  "magic",
-  "difficulty",
-  "hp",
-  "hpperlevel",
-  "mp",
-  "mpperlevel",
-  "movespeed",
-  "armor",
-  "armorperlevel",
-  "spellblock",
-  "spellblockperlevel",
-  "attackrange",
-  "hpregen",
-  "hpregenperlevel",
-  "mpregen",
-  "mpregenperlevel",
-  "crit",
-  "critperlevel",
-  "attackdamage",
-  "attackdamageperlevel",
-  "attackspeedoffset",
-  "attackspeedperlevel",
-  "attackspeed"
-]);
+const validProperties = Object.freeze({
+  name: true,
+  version: true,
+  title: true,
+  attack: true,
+  defense: true,
+  magic: true,
+  difficulty: true,
+  hp: true,
+  hpperlevel: true,
+  mp: true,
+  mpperlevel: true,
+  movespeed: true,
+  armor: true,
+  armorperlevel: true,
+  spellblock: true,
+  spellblockperlevel: true,
+  attackrange: true,
+  hpregen: true,
+  hpregenperlevel: true,
+  mpregen: true,
+  mpregenperlevel: true,
+  crit: true,
+  critperlevel: true,
+  attackdamage: true,
+  attackdamageperlevel: true,
+  attackspeedoffset: true,
+  attackspeedperlevel: true,
+  attackspeed: true
+});
 
 const redisClient = Redis.createClient(6379, '127.0.0.1');
 
@@ -73,8 +73,8 @@ file.on('line', line => {
     }
 
     // Inject 10 loaded champions
-    if (loadedChampions.length == 10) {
-      for (champion of loadedChampions) {
+    if (loadedChampions.length === 10) {
+      for (let champion of loadedChampions) {
         redisClient.set(champion.name, champion.version);
         const resp = axios.post('http://localhost:3000/champion', champion);
       }
@@ -96,7 +96,7 @@ file.on('line', line => {
       return
     }
 
-    if (validProperties.has(property)) {
+    if (validProperties[property]) {
       const value = valueRg.exec(line)[1];
       currChampion[property] = value;
     }
@@ -105,7 +105,7 @@ file.on('line', line => {
 
 file.on('close', () => {
   console.log(`There are ${loadedChampions.length} champions left to inject`);
-  for (champion of loadedChampions) {
+  for (let champion of loadedChampions) {
     redisClient.set(champion.name, champion.version);
     axios.post('http://localhost:3000/champion', champion);
   }

@@ -1,3 +1,5 @@
-exports.get404 = (req, res, next) => {
+const get404 = (req, res, next) => {
   res.status(404).send("Page not found");
 };
+
+export default { get404 };

@@ -1,6 +1,7 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../services/database');
-const Champion = require('./champion');
+import Sequelize from 'sequelize';
+
+import sequelize from '../services/database.js';
+import Champion from './champion.js';
 
 // Champs stats table
 const Stat = sequelize.define(
@@ -126,4 +127,4 @@ const Stat = sequelize.define(
 //   foreignKey: 'id',
 // });
 
-module.exports = Stat;
+export default Stat;

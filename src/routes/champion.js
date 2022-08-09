@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 
-const champsController = require('../controllers/champion');
+import champsController from '../controllers/champion.js';
 
 const router = express.Router();
 
@@ -16,4 +16,4 @@ router
 router
   .get('/refresh/:name', champsController.refreshChamp);
 
-module.exports = router;
+export default router;
