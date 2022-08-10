@@ -1,6 +1,7 @@
 // Node modules
-import express from 'express';
 import bodyParser from 'body-parser';
+import express from 'express';
+import mongoose from 'mongoose';
 import 'dotenv/config';
 
 // Constants
@@ -24,11 +25,18 @@ app.use(routeURIs.stat, statRoutes);
 
 app.use(errorController.get404);
 
+const errorHandler = (error, _req, res, _next) => {
+  console.log(`Catched error: ${error}`);
+  res.status(500).json(error.message);
+};
+app.use(errorHandler);
+
 (async () => {
   try {
     await sequelize.sync({ force: false });
+    mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWD}@${process.env.MONGO_CONTAINER}:27017`);
     app.listen(3000);
   } catch (err) {
-    console.error(err);
+    console.error(`Problem with app initialization: ${err}`);
   }
 })();

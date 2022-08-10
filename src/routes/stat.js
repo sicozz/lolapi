@@ -4,6 +4,10 @@ import statController from '../controllers/stat.js';
 
 const router = express.Router();
 
-router.get('/:name', statController.getStats);
+// SQL
+router.get('/sql/:name', statController.sql.getStats);
+
+// MONGO
+router.get('/mongo/:name', statController.mongo.getStats);
 
 export default router;

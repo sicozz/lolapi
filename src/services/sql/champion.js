@@ -3,65 +3,45 @@ import Stat from '../../models/stat.js';
 
 // Find all champions
 const findAll = async () => {
-  try {
-    const champions = Champion.findAll({
-      include: { model: Stat, required: true }
-    });
-    return champions;
-  } catch (err) {
-    console.error(err);
-  }
+  const champions = Champion.findAll({
+    include: { model: Stat, required: true }
+  });
+  return champions;
 };
 
 // Find champion by name
 const findByName = async championName => {
-  try {
-    const champion = await Champion.findOne({
-      where: { name: championName },
-      include: { model: Stat, required: true }
-    });
-    return champion
-  } catch (err) {
-    console.error(err);
-  }
+  const champion = await Champion.findOne({
+    where: { name: championName },
+    include: { model: Stat, required: true }
+  });
+  return champion
 };
 
 // Add data to champion table
 const create = async data => {
-  try {
-    const createResponse = await Champion.create(data);
-    return createResponse;
-  } catch (err) {
-    console.error(err);
-  }
+  const createResponse = await Champion.create(data);
+  return createResponse;
 };
 
 // Update by champion name
 const update = async (championName, data) => {
-  try {
-    const updatedRowsNum = Champion.update(
-      data,
-      { where: { name: championName } }
-    );
-    return updatedRowsNum;
-  } catch (err) {
-    console.error(err);
-  }
+  const updatedRowsNum = Champion.update(
+    data,
+    { where: { name: championName } }
+  );
+  return updatedRowsNum;
 };
 
 // Delete row by champion name
 const destroy = async championName => {
-  try {
-    const champion = await findByName(championName);
-    if (!champion) {
-      throw `No champion named ${championName} to be deleted`
-    };
+  const champion = await findByName(championName);
+  if (!champion) {
+    throw new Error(`No champion named ${championName} to be deleted`);
+  };
 
-    // Soft delete (cascade)
-    await champion.destroy();
-  } catch (err) {
-    console.error(err);
-  }
+  // Soft delete (cascade)
+  await champion.destroy();
 };
 
 export default {

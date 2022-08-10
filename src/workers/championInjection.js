@@ -88,7 +88,7 @@ file.on('line', line => {
     stack++;
   }
 
-  //  Base state -> add base attributes
+  // Base state -> add base attributes
   else if (stack != 0) {
     const property = propertyRg.exec(line)[1];
 

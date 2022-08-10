@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 
-import sequelize from '../services/sql/database.js';
+import sequelize from '../../services/sql/database.js';
 import Stat from './stat.js';
 
 // Champ table

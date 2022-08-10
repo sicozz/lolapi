@@ -1,6 +1,6 @@
 import StatDAO from '../services/sql/stat.js';
 
-const getStats = async (req, res) => {
+const getStats = async (req, res, next) => {
   const championName = req.params.name;
 
   try {
@@ -12,8 +12,7 @@ const getStats = async (req, res) => {
     }
     return res.status(200).json(championStats);
   } catch (err) {
-    console.error(err);
-    return res.status(500).json(err);
+    next(err);
   }
 };
 
