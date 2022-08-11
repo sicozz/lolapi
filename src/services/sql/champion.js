@@ -1,5 +1,5 @@
-import Champion from '../../models/champion.js';
-import Stat from '../../models/stat.js';
+import Champion from '../../models/sql/champion.js';
+import Stat from '../../models/sql/stat.js';
 
 // Find all champions
 const findAll = async () => {

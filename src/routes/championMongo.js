@@ -1,6 +1,6 @@
 import express from 'express';
 
-import champsController from '../../controllers/championMongo.js';
+import champsController from '../controllers/championMongo.js';
 
 const router = express.Router();
 

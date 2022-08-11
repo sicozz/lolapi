@@ -11,8 +11,10 @@ import routeURIs from './constants/routes.js';
 import sequelize from './services/sql/database.js';
 
 // Routes
-import championRoutes from './routes/champion.js';
-import statRoutes from './routes/stat.js';
+import championSqlRoutes from './routes/championSql.js';
+import championMongoRoutes from './routes/championMongo.js';
+import statSqlRoutes from './routes/statSql.js';
+import statMongoRoutes from './routes/statMongo.js';
 import errorController from './controllers/error.js';
 
 const app = express();
@@ -20,8 +22,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(routeURIs.champion, championRoutes);
-app.use(routeURIs.stat, statRoutes);
+app.use('/sql'+routeURIs.champion , championSqlRoutes);
+app.use('/mongo'+routeURIs.champion, championMongoRoutes);
+app.use('/sql'+routeURIs.stat, statSqlRoutes);
+app.use('/mongo'+routeURIs.stat, statMongoRoutes);
 
 app.use(errorController.get404);
 
@@ -34,7 +38,7 @@ app.use(errorHandler);
 (async () => {
   try {
     await sequelize.sync({ force: false });
-    mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWD}@${process.env.MONGO_CONTAINER}:27017`);
+    mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWD}@localhost:27017`);
     app.listen(3000);
   } catch (err) {
     console.error(`Problem with app initialization: ${err}`);

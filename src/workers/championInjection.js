@@ -76,7 +76,7 @@ file.on('line', line => {
     if (loadedChampions.length === 10) {
       for (let champion of loadedChampions) {
         redisClient.set(champion.name, champion.version);
-        const resp = axios.post('http://localhost:3000/champion', champion);
+        const resp = axios.post('http://localhost:3000/sql/champion', champion);
       }
       redisClient.set("lastLoadedLine", lineNum);
       loadedChampions.splice(0, loadedChampions.length);
@@ -107,7 +107,7 @@ file.on('close', () => {
   console.log(`There are ${loadedChampions.length} champions left to inject`);
   for (let champion of loadedChampions) {
     redisClient.set(champion.name, champion.version);
-    axios.post('http://localhost:3000/champion', champion);
+    axios.post('http://localhost:3000/sql/champion', champion);
   }
   redisClient.set("lastLoadedLine", lineNum);
   loadedChampions.splice(0, loadedChampions.length);

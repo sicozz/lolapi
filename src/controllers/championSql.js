@@ -1,13 +1,11 @@
-import axios from 'axios';
-
-import ChampionDAO from '../../services/sql/champion.js';
-import StatDAO from '../../services/sql/stat.js';
+import ChampionDAO from '../services/sql/champion.js';
+import StatDAO from '../services/sql/stat.js';
 import {
   extractChampInfo,
   extractChampStats,
   extractRemoteChamp
-} from '../../helpers/extractBody.js';
-import riotAPI from '../../helpers/riotAPI.js';
+} from '../helpers/extractBody.js';
+import riotAPI from '../helpers/riotAPI.js';
 
 // Retrieve every champion from  db
 const getAllChamps = async (_req, res, next) => {
@@ -134,6 +132,9 @@ const refreshChamp = async (req, res, next) => {
     }
     return res.status(302).json(champion);
   } catch (err) {
+    console.log("IN REFRESH");
+    console.log(riotAPI);
+    console.error(err);
     next(err);
   }
 };

@@ -1,4 +1,4 @@
-import Stat from '../../models/stat.js';
+import Stat from '../../models/sql/stat.js';
 
 // Find champion stats by champion name
 const findByName = async championName => {

@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 // RIOT DEVELOPER PORTAL API
 const baseUrl = "http://ddragon.leagueoflegends.com"
 
@@ -10,11 +12,9 @@ const versionsUrl = `${baseUrl}/api/versions.json`;
 
 // Champion latest data
 const getChampionLstVersion = async championName => {
-  const riotVersions = await axios.get(riotAPI.versionsUrl);
+  const riotVersions = await axios.get(versionsUrl);
   const lstVersion = riotVersions.data[0];
-  const champion = await axios.get(
-    riotAPI.champUrl(championName, lstVersion)
-  );
+  const champion = await axios.get(champUrl(championName, lstVersion));
   return champion;
 };
 

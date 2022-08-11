@@ -1,6 +1,6 @@
 import express from 'express';
 
-import champsController from '../../controllers/championSql.js';
+import champsController from '../controllers/championSql.js';
 
 const router = express.Router();
 

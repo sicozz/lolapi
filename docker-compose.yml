@@ -19,3 +19,12 @@ services:
             - lolapi
         ports:
         - '6379:6379'
+    lolmongo:
+        image: mongo
+        networks:
+            - lolapi
+        ports:
+          - "27017:27017"
+        environment:
+          - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+          - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWD}
