@@ -3,7 +3,7 @@ import Stat from '../../models/sql/stat.js';
 
 // Find all champions
 const findAll = async () => {
-  const champions = Champion.findAll({
+  const champions = await Champion.findAll({
     include: { model: Stat, required: true }
   });
   return champions;
@@ -26,7 +26,7 @@ const create = async data => {
 
 // Update by champion name
 const update = async (championName, data) => {
-  const updatedRowsNum = Champion.update(
+  const updatedRowsNum = await Champion.update(
     data,
     { where: { name: championName } }
   );

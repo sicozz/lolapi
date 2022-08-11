@@ -16,12 +16,12 @@ const Champion = sequelize.define(
 
     name: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: false
     },
 
     version: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: false
     },
 
     title: {
