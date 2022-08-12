@@ -11,10 +11,10 @@ import routeURIs from './constants/routes.js';
 import sequelize from './services/sql/database.js';
 
 // Routes
-import championSqlRoutes from './routes/championSql.js';
-import championMongoRoutes from './routes/championMongo.js';
-import statSqlRoutes from './routes/statSql.js';
-import statMongoRoutes from './routes/statMongo.js';
+import championSqlRoutes from './routes/sql/champion.js';
+import statSqlRoutes from './routes/sql/stat.js';
+import championMongoRoutes from './routes/mongo/champion.js';
+import statMongoRoutes from './routes/mongo/stat.js';
 import errorController from './controllers/error.js';
 
 const app = express();
@@ -22,10 +22,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/sql'+routeURIs.champion , championSqlRoutes);
-app.use('/mongo'+routeURIs.champion, championMongoRoutes);
-app.use('/sql'+routeURIs.stat, statSqlRoutes);
-app.use('/mongo'+routeURIs.stat, statMongoRoutes);
+app.use('/sql' + routeURIs.champion, championSqlRoutes);
+app.use('/mongo' + routeURIs.champion, championMongoRoutes);
+app.use('/sql' + routeURIs.stat, statSqlRoutes);
+app.use('/mongo' + routeURIs.stat, statMongoRoutes);
 
 app.use(errorController.get404);
 

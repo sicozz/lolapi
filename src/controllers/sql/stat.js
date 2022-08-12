@@ -1,4 +1,4 @@
-import StatDAO from '../services/sql/stat.js';
+import StatDAO from '../../services/sql/stat.js';
 
 const getStats = async (req, res, next) => {
   const championName = req.params.name;

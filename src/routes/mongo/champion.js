@@ -1,10 +1,10 @@
 import express from 'express';
 
-import champsController from '../controllers/championSql.js';
+import champsController from '../../controllers/mongo/champion.js';
 
 const router = express.Router();
 
-// SQL
+// MONGODB
 router
   .get('/', champsController.getAllChamps)
   .post('/', champsController.addChamp)

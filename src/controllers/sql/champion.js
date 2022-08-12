@@ -1,13 +1,11 @@
-import axios from 'axios';
-
-import ChampionDAO from '../services/mongo/champion.js';
-import StatDAO from '../services/mongo/stat.js';
+import ChampionDAO from '../../services/sql/champion.js';
+import StatDAO from '../../services/sql/stat.js';
 import {
   extractChampInfo,
   extractChampStats,
   extractRemoteChamp
-} from '../helpers/extractBody.js';
-import riotAPI from '../helpers/riotAPI.js';
+} from '../../helpers/extractBody.js';
+import riotAPI from '../../helpers/riotAPI.js';
 
 // Retrieve every champion from  db
 const getAllChamps = async (_req, res, next) => {
@@ -53,14 +51,14 @@ const addChamp = async (req, res, next) => {
       );
     }
 
-    const championStats = await StatDAO.create(newChampStats);
-    newChampInfo.stats = championStats._id;
     const championInfo = await ChampionDAO.create(newChampInfo);
+    newChampStats.championId = championInfo.id;
+    const championStats = await StatDAO.create(newChampStats);
 
     const values = Object.assign(
       {},
-      championInfo._doc,
-      championStats._doc
+      championInfo.dataValues,
+      championStats.dataValues
     );
     return res.status(201).json(values);
   } catch (err) {

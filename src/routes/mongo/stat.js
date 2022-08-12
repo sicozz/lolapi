@@ -1,6 +1,6 @@
 import express from 'express';
 
-import statController from '../controllers/statSql.js';
+import statController from '../../controllers/mongo/stat.js';
 
 const router = express.Router();
 
