@@ -2,19 +2,22 @@ import Champion from '../../models/mongo/champion.js';
 
 // Find all champions
 const findAll = async () => {
-  const champions = await Champion.find();
+  const champions = await Champion.find().populate('stats');
   return champions;
 };
 
 // Find champion by name
 const findByName = async championName => {
-  const champion = await Champion.findOne({ name: championName });
+  const champion = await Champion
+    .findOne({ name: championName })
+    .populate('stats');
   return champion;
 };
 
-// Add data to champion table
+// Add champion document
 const create = async data => {
-  const createResponse = await Champion.save(data);
+  const newChampion = new Champion(data);
+  const createResponse = await newChampion.save();
   return createResponse;
 };
 

@@ -86,8 +86,9 @@ const updateChamp = async (req, res, next) => {
 
     await ChampionDAO.update(championName, newChampInfo);
     await StatDAO.update(championName, newChampStats);
+    const updatedChampion = await ChampionDAO.findByName(championName);
 
-    return res.status(201).json(`${championName} was updated`);
+    return res.status(201).json(updatedChampion);
   } catch (err) {
     next(err);
   }
@@ -113,28 +114,15 @@ const refreshChamp = async (req, res, next) => {
     const remoteChampion = await riotAPI.getChampionLstVersion(championName);
 
     const newChampData = extractRemoteChamp(remoteChampion.data, championName);
-    const newChampInfo = extractChampInfo(newChampData);
-    const newChampStats = extractChampStats(newChampData);
+    req.body = newChampData;
 
     if (!champion) {
-      const newChamp = await ChampionDAO.create(newChampInfo);
-      newChampStats.championId = newChamp.id;
-      await StatDAO.create(newChampStats);
-
-      const refreshedChamp = await ChampionDAO.findByName(championName);
-      return res.status(201).json(refreshedChamp);
+      return addChamp(req, res, next);
     } else if (champion.version != remoteChampion.version) {
-      await ChampionDAO.update(championName, newChampInfo);
-      await StatDAO.update(championName, newChampStats);
-
-      const refreshedChamp = await ChampionDAO.findByName(championName);
-      return res.status(302).json(refreshedChamp);
+      return updateChamp(req, res, next);
     }
     return res.status(302).json(champion);
   } catch (err) {
-    console.log("IN REFRESH");
-    console.log(riotAPI);
-    console.error(err);
     next(err);
   }
 };
