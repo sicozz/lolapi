@@ -7,7 +7,7 @@ const SALT = 10;
 const findUser = async id => {
   const user = await User.findByPk(id);
   if (!user) {
-    throw new Error(`No user with id ${id} to be deleted`);
+    throw new Error(`No user with id ${id}`);
   };
   return user;
 };
@@ -20,11 +20,13 @@ const create = async user => {
 
 const login = async user => {
   const dbUser = await User.findOne({ where: { username: user.username } })
-  if (await bcrypt.compare(user.passwd, dbUser.passwd)) {
-    return { success: true, id: dbUser.id };
-  } else {
+  if (!dbUser) {
     return { success: false }
   }
+  if (await bcrypt.compare(user.passwd, dbUser.passwd)) {
+    return { success: true, id: dbUser.id };
+  }
+  return { success: false }
 };
 
 const updatePriviledges = async (id, priviledge) => {
@@ -41,6 +43,7 @@ const destroy = async id => {
 };
 
 export default {
+  findUser,
   create,
   login,
   updatePriviledges,
