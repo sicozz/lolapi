@@ -1,6 +1,7 @@
 // Node modules
 import bodyParser from 'body-parser';
 import express from 'express';
+import session from 'express-session';
 import mongoose from 'mongoose';
 import 'dotenv/config';
 
@@ -22,14 +23,19 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}))
 
 app.use(routeURIs.user, userRoutes)
 app.use('/sql' + routeURIs.champion, championSqlRoutes);
 app.use('/mongo' + routeURIs.champion, championMongoRoutes);
 app.use('/sql' + routeURIs.stat, statSqlRoutes);
 app.use('/mongo' + routeURIs.stat, statMongoRoutes);
-
 app.use(errorController.get404);
+
 app.use(errorController.errorHandler);
 
 (async () => {

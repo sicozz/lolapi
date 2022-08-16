@@ -14,7 +14,8 @@ const signin = async (req, res, next) => {
     const id = await UserDAO.create(user);
 
     if (id) {
-      res.json({ id });
+      req.session.user = id;
+      res.json("Signin successful");
     } else {
       throw new Error(`signin failed`);
     }
@@ -30,7 +31,8 @@ const login = async (req, res, next) => {
     const resp = await UserDAO.login({ username, passwd });
 
     if (resp.success) {
-      res.json({ id: resp.id });
+      req.session.user = id;
+      res.json("Login successful");
     } else {
       res.json("Wrong username or password")
     }
