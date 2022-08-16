@@ -1,4 +1,8 @@
-import User from '../models/user.js'
+import bcrypt from 'bcrypt';
+
+import User from '../models/user.js';
+
+const SALT = 10;
 
 const findUser = async id => {
   const user = await User.findByPk(id);
@@ -9,14 +13,14 @@ const findUser = async id => {
 };
 
 const create = async user => {
+  user.passwd = await bcrypt.hash(user.passwd, SALT);
   const createResp = await User.create(user);
   return createResp.dataValues.id;
 };
 
-// ADD BCRYPT
 const login = async user => {
   const dbUser = await User.findOne({ where: { username: user.username } })
-  if (dbUser.passwd == user.passwd) {
+  if (await bcrypt.compare(user.passwd, dbUser.passwd)) {
     return { success: true, id: dbUser.id };
   } else {
     return { success: false }

@@ -1,4 +1,4 @@
-import UserDAO from '../services/user.js'
+import UserDAO from '../services/user.js';
 import priviledges from '../helpers/priviledges.js';
 
 const signin = async (req, res, next) => {
@@ -31,7 +31,7 @@ const login = async (req, res, next) => {
     const resp = await UserDAO.login({ username, passwd });
 
     if (resp.success) {
-      req.session.user = id;
+      req.session.user = resp.id;
       res.json("Login successful");
     } else {
       res.json("Wrong username or password")
