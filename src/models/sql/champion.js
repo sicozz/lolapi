@@ -16,7 +16,8 @@ const Champion = sequelize.define(
 
     name: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
 
     version: {

@@ -26,6 +26,7 @@ const Stat = sequelize.define(
     name: {
       type: Sequelize.STRING,
       allowNull: false,
+      unique: true
     },
 
     hp: {

@@ -20,8 +20,8 @@ const findByName = async championName => {
 
 // Add data to champion table
 const create = async data => {
-  const createResponse = await Champion.create(data);
-  return createResponse;
+  const createResp = await Champion.create(data);
+  return createResp;
 };
 
 // Update by champion name

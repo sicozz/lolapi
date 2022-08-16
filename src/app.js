@@ -11,6 +11,7 @@ import routeURIs from './constants/routes.js';
 import sequelize from './services/sql/database.js';
 
 // Routes
+import userRoutes from './routes/user.js'
 import championSqlRoutes from './routes/sql/champion.js';
 import statSqlRoutes from './routes/sql/stat.js';
 import championMongoRoutes from './routes/mongo/champion.js';
@@ -22,18 +23,14 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(routeURIs.user, userRoutes)
 app.use('/sql' + routeURIs.champion, championSqlRoutes);
 app.use('/mongo' + routeURIs.champion, championMongoRoutes);
 app.use('/sql' + routeURIs.stat, statSqlRoutes);
 app.use('/mongo' + routeURIs.stat, statMongoRoutes);
 
 app.use(errorController.get404);
-
-const errorHandler = (error, _req, res, _next) => {
-  console.log(`Catched error: ${error}`);
-  res.status(500).json(error.message);
-};
-app.use(errorHandler);
+app.use(errorController.errorHandler);
 
 (async () => {
   try {
