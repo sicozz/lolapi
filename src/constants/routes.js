@@ -2,7 +2,7 @@
 const routeURIs = {
   user: '/user',
   champion: '/champion',
-  stat: '/stat'
+  stat: '/stat',
 };
 
 export default routeURIs;

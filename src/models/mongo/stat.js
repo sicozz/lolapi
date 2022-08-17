@@ -3,84 +3,84 @@ import mongoose from 'mongoose';
 const statSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
 
   hp: {
-    type: Number
+    type: Number,
   },
 
   hpperlevel: {
-    type: Number
+    type: Number,
   },
 
   mp: {
-    type: Number
+    type: Number,
   },
 
   mpperlevel: {
-    type: Number
+    type: Number,
   },
 
   movespeed: {
-    type: Number
+    type: Number,
   },
 
   armor: {
-    type: Number
+    type: Number,
   },
 
   armorperlevel: {
-    type: Number
+    type: Number,
   },
 
   spellblock: {
-    type: Number
+    type: Number,
   },
 
   spellblockperlevel: {
-    type: Number
+    type: Number,
   },
 
   attackrange: {
-    type: Number
+    type: Number,
   },
 
   hpregen: {
-    type: Number
+    type: Number,
   },
 
   hpregenperlevel: {
-    type: Number
+    type: Number,
   },
 
   mpregen: {
-    type: Number
+    type: Number,
   },
 
   mpregenperlevel: {
-    type: Number
+    type: Number,
   },
 
   crit: {
-    type: Number
+    type: Number,
   },
 
   critperlevel: {
-    type: Number
+    type: Number,
   },
 
   attackdamage: {
-    type: Number
+    type: Number,
   },
 
   attackdamageperlevel: {
-    type: Number
+    type: Number,
   },
 
   attackspeedperlevel: {
-    type: Number
-  }
+    type: Number,
+  },
 });
 
 export default mongoose.model('Stat', statSchema);

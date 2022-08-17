@@ -3,21 +3,21 @@ import priviledges from '../helpers/priviledges.js';
 
 const signin = async (req, res, next) => {
   try {
-    const username = req.body.username;
+    const { username } = req.body;
     const passwd = req.body.password;
     const priviledge = priviledges.user;
     const user = {
-      username: username,
-      passwd: passwd,
-      priviledges: priviledge
-    }
+      username,
+      passwd,
+      priviledges: priviledge,
+    };
     const id = await UserDAO.create(user);
 
     if (id) {
       req.session.user = id;
-      res.json("Signin successful");
+      res.json('Signin successful');
     } else {
-      throw new Error(`signin failed`);
+      throw new Error('signin failed');
     }
   } catch (err) {
     next(err);
@@ -26,15 +26,15 @@ const signin = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const username = req.body.username;
+    const { username } = req.body;
     const passwd = req.body.password;
     const resp = await UserDAO.login({ username, passwd });
 
     if (resp.success) {
       req.session.user = resp.id;
-      res.json("Login successful");
+      res.json('Login successful');
     } else {
-      res.json("Wrong username or password")
+      res.json('Wrong username or password');
     }
   } catch (err) {
     next(err);
@@ -56,7 +56,7 @@ const deleteUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
     await UserDAO.destroy(userId);
-    res.json(`User with id ${userId} was deleted`)
+    res.json(`User with id ${userId} was deleted`);
   } catch (err) {
     next(err);
   }
@@ -66,5 +66,5 @@ export default {
   signin,
   login,
   manageUser,
-  deleteUser
+  deleteUser,
 };

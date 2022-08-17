@@ -3,7 +3,7 @@ import StatDAO from '../../services/sql/stat.js';
 import {
   extractChampInfo,
   extractChampStats,
-  extractRemoteChamp
+  extractRemoteChamp,
 } from '../../helpers/extractBody.js';
 import riotAPI from '../../helpers/riotAPI.js';
 
@@ -13,7 +13,7 @@ const getAllChamps = async (_req, res, next) => {
     const allChamps = await ChampionDAO.findAll();
     return res.status(200).json(allChamps);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -24,12 +24,12 @@ const getChamp = async (req, res, next) => {
     const champion = await ChampionDAO.findByName(championName);
     if (!champion) {
       return res.status(404).json(
-        `Could not find champion with name: ${championName}`
+        `Could not find champion with name: ${championName}`,
       );
     }
     return res.status(200).json(champion);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -41,13 +41,13 @@ const addChamp = async (req, res, next) => {
 
   try {
     if (!championName) {
-      throw new Error(`A name is required to create a new champion`);
+      throw new Error('A name is required to create a new champion');
     }
 
     const champion = await ChampionDAO.findByName(championName);
     if (champion) {
       return res.status(409).json(
-        `Champion with name: ${newChampInfo.name} already exists`
+        `Champion with name: ${newChampInfo.name} already exists`,
       );
     }
 
@@ -55,14 +55,14 @@ const addChamp = async (req, res, next) => {
     newChampStats.championId = championInfo.id;
     const championStats = await StatDAO.create(newChampStats);
 
-    const values = Object.assign(
-      {},
-      championInfo.dataValues,
-      championStats.dataValues
-    );
+    const values = {
+
+      ...championInfo.dataValues,
+      ...championStats.dataValues,
+    };
     return res.status(201).json(values);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -74,13 +74,13 @@ const updateChamp = async (req, res, next) => {
 
   try {
     if (!championName) {
-      throw new Error(`Champion name is required to update the champion`);
+      throw new Error('Champion name is required to update the champion');
     }
 
     const champion = await ChampionDAO.findByName(championName);
     if (!champion) {
       return res.status(404).json(
-        `Could not find champion with name: ${championName}`
+        `Could not find champion with name: ${championName}`,
       );
     }
 
@@ -90,7 +90,7 @@ const updateChamp = async (req, res, next) => {
 
     return res.status(201).json(updatedChampion);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -102,7 +102,7 @@ const deleteChamp = async (req, res, next) => {
     await ChampionDAO.destroy(championName);
     return res.status(201).json(`${championName} was deleted`);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -118,12 +118,12 @@ const refreshChamp = async (req, res, next) => {
 
     if (!champion) {
       return addChamp(req, res, next);
-    } else if (champion.version != remoteChampion.version) {
+    } if (champion.version !== remoteChampion.version) {
       return updateChamp(req, res, next);
     }
     return res.status(302).json(champion);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -133,5 +133,5 @@ export default {
   addChamp,
   updateChamp,
   deleteChamp,
-  refreshChamp
-}
+  refreshChamp,
+};

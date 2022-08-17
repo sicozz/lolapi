@@ -7,7 +7,7 @@ const findAll = async () => {
 };
 
 // Find champion by name
-const findByName = async championName => {
+const findByName = async (championName) => {
   const champion = await Champion
     .findOne({ name: championName })
     .populate('stats');
@@ -15,7 +15,7 @@ const findByName = async championName => {
 };
 
 // Add champion document
-const create = async data => {
+const create = async (data) => {
   const newChampion = new Champion(data);
   const createResponse = await newChampion.save();
   return createResponse;
@@ -31,7 +31,7 @@ const update = async (championName, data) => {
 };
 
 // Delete row by champion name
-const destroy = async championName => {
+const destroy = async (championName) => {
   const deleteResp = await Champion.deleteOne({ name: championName });
   return deleteResp;
 };
@@ -41,5 +41,5 @@ export default {
   findByName,
   create,
   update,
-  destroy
+  destroy,
 };

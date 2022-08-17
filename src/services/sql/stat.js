@@ -1,13 +1,13 @@
 import Stat from '../../models/sql/stat.js';
 
 // Find champion stats by champion name
-const findByName = async championName => {
+const findByName = async (championName) => {
   const stat = await Stat.findOne({ where: { name: championName } });
-  return stat
+  return stat;
 };
 
 // Add data to stat table
-const create = async data => {
+const create = async (data) => {
   const createResponse = await Stat.create(data);
   return createResponse;
 };
@@ -16,7 +16,7 @@ const create = async data => {
 const update = async (championName, data) => {
   const updatedRowsNum = await Stat.update(
     data,
-    { where: { name: championName } }
+    { where: { name: championName } },
   );
   return updatedRowsNum;
 };
@@ -24,5 +24,5 @@ const update = async (championName, data) => {
 export default {
   findByName,
   create,
-  update
-}
+  update,
+};

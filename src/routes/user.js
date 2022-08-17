@@ -12,12 +12,12 @@ router
   .put(
     '/',
     authenticator([priviledges.admin]),
-    userController.manageUser
-  )            // Manage user privileges
+    userController.manageUser,
+  ) // Manage user privileges
   .delete(
     '/:id',
     authenticator([priviledges.admin]),
-    userController.deleteUser
+    userController.deleteUser,
   );
 
 export default router;

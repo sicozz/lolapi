@@ -3,38 +3,38 @@ import mongoose from 'mongoose';
 const championSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
 
   version: {
     type: String,
-    required: true
+    required: true,
   },
 
   title: {
-    type: String
+    type: String,
   },
 
   attack: {
-    type: Number
+    type: Number,
   },
 
   defense: {
-    type: Number
+    type: Number,
   },
 
   magic: {
-    type: Number
+    type: Number,
   },
 
   difficulty: {
-    type: Number
+    type: Number,
   },
 
   stats: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Stat'
-  }
+    ref: 'Stat',
+  },
 });
 
 export default mongoose.model('Champion', championSchema);

@@ -1,14 +1,14 @@
-export const extractChampInfo = rawObject => ({
+export const extractChampInfo = (rawObject) => ({
   name: rawObject.name,
   attack: rawObject.attack,
   title: rawObject.title,
   version: rawObject.version,
   defense: rawObject.defense,
   magic: rawObject.magic,
-  difficulty: rawObject.difficulty
+  difficulty: rawObject.difficulty,
 });
 
-export const extractChampStats = rawObject => ({
+export const extractChampStats = (rawObject) => ({
   name: rawObject.name,
   armor: Number(rawObject.armor),
   armorperlevel: Number(rawObject.armorperlevel),
@@ -28,20 +28,18 @@ export const extractChampStats = rawObject => ({
   mpregen: Number(rawObject.mpregen),
   mpregenperlevel: Number(rawObject.mpregenperlevel),
   spellblock: Number(rawObject.spellblock),
-  spellblockperlevel: Number(rawObject.spellblockperlevel)
+  spellblockperlevel: Number(rawObject.spellblockperlevel),
 });
 
 export const extractRemoteChamp = (riotResp, champName) => {
-  const info = extractChampInfo(riotResp.data[champName].info)
+  const info = extractChampInfo(riotResp.data[champName].info);
   const stats = extractChampStats(riotResp.data[champName].stats);
-  return Object.assign(
-    {},
-    info,
-    stats,
-    {
-      name: riotResp.data[champName].name,
-      title: riotResp.data[champName].title,
-      version: riotResp.version
-    },
-  );
+  return {
+
+    ...info,
+    ...stats,
+    name: riotResp.data[champName].name,
+    title: riotResp.data[champName].title,
+    version: riotResp.version,
+  };
 };

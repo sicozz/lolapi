@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./src/app.js",
-    "start-server": "node app.js"
+    "start-server": "node app.js",
+    "lint": "eslint src/",
+    "lint-fix": "eslint src/ --fix"
   },
   "repository": "git@github.com:sicozz/lolapi.git",
   "author": "Simon Zuluaga <simozuluaga@gmail.com>",
@@ -20,9 +22,14 @@
     "express-session": "^1.17.3",
     "mongoose": "^6.5.2",
     "mysql2": "^2.3.3",
-    "nodemon": "^2.0.19",
     "redis": "3.1.1",
     "sequelize": "^6.21.3"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "nodemon": "^2.0.19"
+  }
 }

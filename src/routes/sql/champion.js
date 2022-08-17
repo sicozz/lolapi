@@ -10,14 +10,14 @@ const router = express.Router();
 router
   .get('/', champsController.getAllChamps)
   .post(
-    '/', 
+    '/',
     authenticator([priviledges.rioter]),
-    champsController.addChamp
+    champsController.addChamp,
   )
   .put(
     '/',
     authenticator([priviledges.rioter]),
-    champsController.updateChamp
+    champsController.updateChamp,
   );
 
 router
@@ -25,14 +25,14 @@ router
   .delete(
     '/:name',
     authenticator([priviledges.rioter]),
-    champsController.deleteChamp
+    champsController.deleteChamp,
   );
 
 router
   .get(
     '/refresh/:name',
     authenticator([priviledges.user, priviledges.rioter]),
-    champsController.refreshChamp
+    champsController.refreshChamp,
   );
 
 export default router;

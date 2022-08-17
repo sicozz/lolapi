@@ -7,15 +7,15 @@ const getStats = async (req, res, next) => {
     const championStats = await StatDAO.findByName(championName);
     if (!championStats) {
       return res.status(404).json(
-        `Could not find stats of champion with name: ${championName}`
+        `Could not find stats of champion with name: ${championName}`,
       );
     }
     return res.status(200).json(championStats);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
 export default {
-  getStats
-}
+  getStats,
+};

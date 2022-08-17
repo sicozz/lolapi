@@ -11,38 +11,38 @@ const Champion = sequelize.define(
       type: Sequelize.INTEGER,
       allowNull: false,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
     },
 
     name: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
 
     version: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
 
     title: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
 
     attack: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
 
     defense: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
 
     magic: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
 
     difficulty: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
   },
   {
@@ -54,7 +54,7 @@ const Champion = sequelize.define(
     //   });
     //   return Champion;
     // }
-  }
+  },
 );
 
 // Champion.associate = models => {
@@ -67,7 +67,7 @@ const Champion = sequelize.define(
 
 Champion.hasOne(Stat, {
   foreignKey: 'championId',
-  onDelete: 'CASCADE'
+  onDelete: 'CASCADE',
 });
 
 export default Champion;

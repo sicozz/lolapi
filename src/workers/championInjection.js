@@ -5,7 +5,7 @@ import readline from 'readline';
 import Redis from 'redis';
 import axios from 'axios';
 
-const filePath = './champion.json'
+const filePath = './champion.json';
 const validProperties = Object.freeze({
   name: true,
   version: true,
@@ -34,7 +34,7 @@ const validProperties = Object.freeze({
   attackdamageperlevel: true,
   attackspeedoffset: true,
   attackspeedperlevel: true,
-  attackspeed: true
+  attackspeed: true,
 });
 
 const redisClient = Redis.createClient(6379, '127.0.0.1');
@@ -52,19 +52,15 @@ let currChampion = {};
 const file = readline.createInterface({
   input: fs.createReadStream(filePath),
   output: process.stdout,
-  terminal: false
+  terminal: false,
 });
 
-file.on('line', line => {
-  lineNum++;
-
-  if (line == "{") {
-    return
-  }
+file.on('line', (line) => {
+  lineNum += 1;
 
   // Closing depth level
-  else if (closingRg.exec(line) !== null) {
-    stack--;
+  if (closingRg.exec(line) !== null) {
+    stack -= 1;
 
     // Load champion
     if (stack === 0) {
@@ -74,26 +70,26 @@ file.on('line', line => {
 
     // Inject 10 loaded champions
     if (loadedChampions.length === 10) {
-      for (let champion of loadedChampions) {
+      for (const champion of loadedChampions) {
         redisClient.set(champion.name, champion.version);
-        const resp = axios.post('http://localhost:3000/sql/champion', champion);
+        axios.post('http://localhost:3000/sql/champion', champion);
       }
-      redisClient.set("lastLoadedLine", lineNum);
+      redisClient.set('lastLoadedLine', lineNum);
       loadedChampions.splice(0, loadedChampions.length);
     }
   }
 
   // Opening depth level
   else if (openingRg.exec(line) !== null) {
-    stack++;
+    stack += 1;
   }
 
   // Base state -> add base attributes
-  else if (stack != 0) {
+  else if (stack !== 0) {
     const property = propertyRg.exec(line)[1];
 
     if (valueRg.exec(line) === null) {
-      return
+      return;
     }
 
     if (validProperties[property]) {
@@ -105,11 +101,11 @@ file.on('line', line => {
 
 file.on('close', () => {
   console.log(`There are ${loadedChampions.length} champions left to inject`);
-  for (let champion of loadedChampions) {
+  for (const champion of loadedChampions) {
     redisClient.set(champion.name, champion.version);
     axios.post('http://localhost:3000/sql/champion', champion);
   }
-  redisClient.set("lastLoadedLine", lineNum);
+  redisClient.set('lastLoadedLine', lineNum);
   loadedChampions.splice(0, loadedChampions.length);
   redisClient.quit();
 });

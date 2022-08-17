@@ -11,26 +11,26 @@ const User = sequelize.define(
       type: Sequelize.INTEGER,
       allowNull: false,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
     },
 
     username: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
 
     passwd: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
 
     priviledges: {
       type: Sequelize.ENUM(...Object.keys(priviledges)),
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
-  { timestamps: false }
+  { timestamps: false },
 );
 
 export default User;

@@ -11,7 +11,7 @@ const Stat = sequelize.define(
       type: Sequelize.INTEGER,
       allowNull: false,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
     },
 
     championId: {
@@ -19,91 +19,91 @@ const Stat = sequelize.define(
       allowNull: false,
       references: {
         model: 'champions',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
 
     name: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
 
     hp: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     hpperlevel: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     mp: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     mpperlevel: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     movespeed: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     armor: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     armorperlevel: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     spellblock: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     spellblockperlevel: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     attackrange: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     hpregen: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     hpregenperlevel: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     mpregen: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     mpregenperlevel: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     crit: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     critperlevel: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     attackdamage: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     attackdamageperlevel: {
-      type: Sequelize.FLOAT
+      type: Sequelize.FLOAT,
     },
 
     attackspeedperlevel: {
-      type: Sequelize.FLOAT
-    }
+      type: Sequelize.FLOAT,
+    },
   },
   {
     timestamps: false,
@@ -114,7 +114,7 @@ const Stat = sequelize.define(
     //   });
     //   return Stat;
     // }
-  }
+  },
 );
 
 // Stat.associate = models => {
