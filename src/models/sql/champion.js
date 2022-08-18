@@ -44,6 +44,11 @@ const Champion = sequelize.define(
     difficulty: {
       type: Sequelize.INTEGER,
     },
+
+    image: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
   },
   {
     timestamps: false,

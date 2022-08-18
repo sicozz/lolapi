@@ -6,6 +6,7 @@ export const extractChampInfo = (rawObject) => ({
   defense: rawObject.defense,
   magic: rawObject.magic,
   difficulty: rawObject.difficulty,
+  image: rawObject.image,
 });
 
 export const extractChampStats = (rawObject) => ({

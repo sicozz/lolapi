@@ -27,6 +27,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  expires: new Date(Date.now() + 3600000),
 }));
 
 app.use(routeURIs.user, userRoutes);

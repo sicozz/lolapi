@@ -127,6 +127,34 @@ const refreshChamp = async (req, res, next) => {
   }
 };
 
+const getChampionImage = async (req, res, next) => {
+  try {
+    const championName = req.params.name;
+    const { image } = await ChampionDAO.findByName(championName);
+    if (!image) {
+      return res.json(`Champion ${championName} has no image`);
+    }
+    return res.sendFile(image, { root: process.cwd() });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const uploadChampionImage = async (req, res, next) => {
+  try {
+    if (req.file) {
+      const championName = req.params.name;
+      const resp = await ChampionDAO.update(
+        championName,
+        { image: req.file.path },
+      );
+      return res.json(resp);
+    }
+  } catch (err) {
+    return next(err);
+  }
+};
+
 export default {
   getAllChamps,
   getChamp,
@@ -134,4 +162,6 @@ export default {
   updateChamp,
   deleteChamp,
   refreshChamp,
+  getChampionImage,
+  uploadChampionImage,
 };

@@ -2,7 +2,7 @@ import express from 'express';
 
 import champsController from '../../controllers/mongo/champion.js';
 import priviledges from '../../helpers/priviledges.js';
-import authenticator from '../../helpers/authenticator.js';
+import auth from '../../helpers/auth.js';
 
 const router = express.Router();
 
@@ -11,12 +11,12 @@ router
   .get('/', champsController.getAllChamps)
   .post(
     '/',
-    authenticator([priviledges.rioter]),
+    auth([priviledges.rioter]),
     champsController.addChamp,
   )
   .put(
     '/',
-    authenticator([priviledges.rioter]),
+    auth([priviledges.rioter]),
     champsController.updateChamp,
   );
 
@@ -24,14 +24,14 @@ router
   .get('/:name', champsController.getChamp)
   .delete(
     '/:name',
-    authenticator([priviledges.rioter]),
+    auth([priviledges.rioter]),
     champsController.deleteChamp,
   );
 
 router
   .get(
     '/refresh/:name',
-    authenticator([priviledges.user, priviledges.rioter]),
+    auth([priviledges.user, priviledges.rioter]),
     champsController.refreshChamp,
   );
 
