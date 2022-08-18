@@ -5,7 +5,7 @@ import priviledges from '../helpers/priviledges.js';
 
 // User table
 const User = sequelize.define(
-  'user',
+  'User',
   {
     id: {
       type: Sequelize.INTEGER,

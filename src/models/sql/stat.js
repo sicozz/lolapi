@@ -5,7 +5,7 @@ import sequelize from '../../services/sql/database.js';
 
 // Champs stats table
 const Stat = sequelize.define(
-  'stat',
+  'Stat',
   {
     id: {
       type: Sequelize.INTEGER,
@@ -14,11 +14,11 @@ const Stat = sequelize.define(
       primaryKey: true,
     },
 
-    championId: {
+    ChampionId: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
-        model: 'champions',
+        model: 'Champions',
         key: 'id',
       },
     },

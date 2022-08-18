@@ -8,7 +8,9 @@ const router = express.Router();
 
 router
   .post('/signin', userController.signin)
-  .post('/login', userController.login)
+  .post('/login', userController.login);
+
+router
   .put(
     '/',
     auth([priviledges.admin]),
@@ -18,6 +20,16 @@ router
     '/:id',
     auth([priviledges.admin]),
     userController.deleteUser,
+  );
+
+router
+  .get(
+    '/champions',
+    userController.getChampions,
+  )
+  .post(
+    '/champions',
+    userController.addChampions,
   );
 
 export default router;

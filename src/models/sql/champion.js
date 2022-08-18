@@ -5,7 +5,7 @@ import Stat from './stat.js';
 
 // Champ table
 const Champion = sequelize.define(
-  'champion',
+  'Champion',
   {
     id: {
       type: Sequelize.INTEGER,

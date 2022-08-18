@@ -150,6 +150,7 @@ const uploadChampionImage = async (req, res, next) => {
       );
       return res.json(resp);
     }
+    throw new Error('Image could not be uploaded');
   } catch (err) {
     return next(err);
   }
