@@ -2,6 +2,7 @@ import express from 'express';
 
 import userController from '../controllers/user.js';
 import priviledges from '../helpers/priviledges.js';
+import uploads from '../helpers/uploads.js';
 import auth from '../helpers/auth.js';
 
 const router = express.Router();
@@ -29,7 +30,8 @@ router
   )
   .post(
     '/champions',
-    userController.addChampions,
+    uploads.xlsx.single('xlsx'),
+    userController.addChampionsXLSX,
   );
 
 export default router;

@@ -73,10 +73,21 @@ const getChampions = async (req, res, next) => {
   }
 };
 
-const addChampions = async (req, res, next) => {
+const addChampionsXLSX = async (req, res, next) => {
   try {
+    if (!req.file) {
+      throw new Error('Excel could not be loaded');
+    }
+    /*
+      * load file
+      * get array of champions
+      * add champions
+      * delete file
+      */
     const userId = req.session.user;
-    res.json('Add champions not implemented yet');
+    const filePath = req.file.path;
+    await UserChampionDAO.addChampionsXLSX(userId, filePath);
+    return res.json("Champions added succesfully");
   } catch (err) {
     return next(err);
   }
@@ -88,5 +99,5 @@ export default {
   manageUser,
   deleteUser,
   getChampions,
-  addChampions,
+  addChampionsXLSX,
 };

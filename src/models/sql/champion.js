@@ -71,7 +71,7 @@ const Champion = sequelize.define(
 // };
 
 Champion.hasOne(Stat, {
-  foreignKey: 'championId',
+  foreignKey: 'ChampionId',
   onDelete: 'CASCADE',
 });
 

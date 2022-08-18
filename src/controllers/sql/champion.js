@@ -52,7 +52,7 @@ const addChamp = async (req, res, next) => {
     }
 
     const championInfo = await ChampionDAO.create(newChampInfo);
-    newChampStats.championId = championInfo.id;
+    newChampStats.ChampionId = championInfo.id;
     const championStats = await StatDAO.create(newChampStats);
 
     const values = {
@@ -142,15 +142,15 @@ const getChampionImage = async (req, res, next) => {
 
 const uploadChampionImage = async (req, res, next) => {
   try {
-    if (req.file) {
-      const championName = req.params.name;
-      const resp = await ChampionDAO.update(
-        championName,
-        { image: req.file.path },
-      );
-      return res.json(resp);
+    if (!req.file) {
+      throw new Error('Image could not be uploaded');
     }
-    throw new Error('Image could not be uploaded');
+    const championName = req.params.name;
+    const resp = await ChampionDAO.update(
+      championName,
+      { image: req.file.path },
+    );
+    return res.json(resp);
   } catch (err) {
     return next(err);
   }
