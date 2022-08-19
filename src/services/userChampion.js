@@ -1,3 +1,4 @@
+import fs from 'fs';
 import xlsx from 'xlsx';
 
 import UserChampion from '../models/userChampion.js';
@@ -27,13 +28,27 @@ const addChampionsXLSX = async (userId, filePath) => {
       attributes: ['id'],
       where: { name: championName },
     });
-    console.log(`${championName}: ${champion.id}`);
     await UserChampion.create({ UserId: userId, ChampionId: champion.id });
   });
-  return 'Add champions not implemented yet';
+  fs.unlinkSync(filePath);
+  return;
+};
+
+const getChampionsXLSX = async userId => {
+  const championsData = await UserChampionDAO.findUserChampions(userId);
+  const champions = championsData[0]['Champions']
+    .map(champion => ({ Champion: champion.name }));
+
+  let workbook = xlsx.utils.book_new();
+  const sheet = xlsx.utils.json_to_sheet(champions);
+  xlsx.utils.book_append_sheet(workbook, sheet);
+  const fileName = `./uploads/xlsx/${Date.now()}.xlsx`
+  xlsx.writeFile(workbook, fileName);
+  return fileName;
 };
 
 export default {
   findUserChampions,
   addChampionsXLSX,
+  getChampionsXLSX,
 };

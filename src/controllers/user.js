@@ -66,8 +66,8 @@ const deleteUser = async (req, res, next) => {
 const getChampions = async (req, res, next) => {
   try {
     const userId = req.session.user;
-    const champions = await UserChampionDAO.findUserChampions(userId);
-    res.json(champions);
+    const xlsxFileName = await UserChampionDAO.getChampionsXLSX(userId);
+    return res.sendFile(xlsxFileName, { root: process.cwd() });
   } catch (err) {
     return next(err);
   }
@@ -78,12 +78,6 @@ const addChampionsXLSX = async (req, res, next) => {
     if (!req.file) {
       throw new Error('Excel could not be loaded');
     }
-    /*
-      * load file
-      * get array of champions
-      * add champions
-      * delete file
-      */
     const userId = req.session.user;
     const filePath = req.file.path;
     await UserChampionDAO.addChampionsXLSX(userId, filePath);
