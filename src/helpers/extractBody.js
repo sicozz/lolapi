@@ -1,11 +1,12 @@
 export const extractChampInfo = (rawObject) => ({
   name: rawObject.name,
-  attack: rawObject.attack,
+  remoteKey: Number(rawObject.key),
+  attack: Number(rawObject.attack),
   title: rawObject.title,
   version: rawObject.version,
-  defense: rawObject.defense,
-  magic: rawObject.magic,
-  difficulty: rawObject.difficulty,
+  defense: Number(rawObject.defense),
+  magic: Number(rawObject.magic),
+  difficulty: Number(rawObject.difficulty),
   image: rawObject.image,
 });
 

@@ -21,7 +21,7 @@ router
   .get('/', champsController.getAllChamps)
   .post(
     '/',
-    auth([priviledges.rioter]),
+    // auth([priviledges.rioter]),
     champsController.addChamp,
   )
   .put(

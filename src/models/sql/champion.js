@@ -20,6 +20,11 @@ const Champion = sequelize.define(
       unique: true,
     },
 
+    remoteKey: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+
     version: {
       type: Sequelize.STRING,
       allowNull: false,

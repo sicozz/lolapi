@@ -87,6 +87,19 @@ const addChampionsXLSX = async (req, res, next) => {
   }
 };
 
+const playableChampionsXLSX = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      throw new Error('Excel could not be loaded');
+    }
+    const filePath = req.file.path;
+    await UserChampionDAO.playableChampionsXLSX(filePath);
+    return res.sendFile(filePath, { root: process.cwd() });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 export default {
   signin,
   login,
@@ -94,4 +107,5 @@ export default {
   deleteUser,
   getChampions,
   addChampionsXLSX,
+  playableChampionsXLSX,
 };

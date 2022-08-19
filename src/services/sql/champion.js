@@ -18,6 +18,12 @@ const findByName = async (championName) => {
   return champion;
 };
 
+// Find champion by remote key
+const findByRemoteKey = async key => {
+  const champion = await Champion.findOne({ where: { remoteKey: key }, });
+  return champion;
+};
+
 // Add data to champion table
 const create = async (data) => {
   const createResp = await Champion.create(data);
@@ -47,6 +53,7 @@ const destroy = async (championName) => {
 export default {
   findAll,
   findByName,
+  findByRemoteKey,
   create,
   update,
   destroy,

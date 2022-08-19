@@ -7,39 +7,40 @@ import axios from 'axios';
 
 const filePath = './champion.json';
 const validProperties = Object.freeze({
-  name: true,
-  version: true,
-  title: true,
+  armor: true,
+  armorperlevel: true,
   attack: true,
+  attackdamage: true,
+  attackdamageperlevel: true,
+  attackrange: true,
+  attackspeed: true,
+  attackspeedoffset: true,
+  attackspeedperlevel: true,
+  crit: true,
+  critperlevel: true,
   defense: true,
-  magic: true,
   difficulty: true,
   hp: true,
   hpperlevel: true,
-  mp: true,
-  mpperlevel: true,
-  movespeed: true,
-  armor: true,
-  armorperlevel: true,
-  spellblock: true,
-  spellblockperlevel: true,
-  attackrange: true,
   hpregen: true,
   hpregenperlevel: true,
+  key: true,
+  magic: true,
+  movespeed: true,
+  mp: true,
+  mpperlevel: true,
   mpregen: true,
   mpregenperlevel: true,
-  crit: true,
-  critperlevel: true,
-  attackdamage: true,
-  attackdamageperlevel: true,
-  attackspeedoffset: true,
-  attackspeedperlevel: true,
-  attackspeed: true,
+  name: true,
+  spellblock: true,
+  spellblockperlevel: true,
+  title: true,
+  version: true,
 });
 
 const redisClient = Redis.createClient(6379, '127.0.0.1');
 
-const openingRg = /^.*[{|\[)]$/;
+const openingRg = /^.+[{|\[)]$/;
 const closingRg = /^\s*(?:}|\]),?$/;
 const propertyRg = /\s+"([^":]+)/;
 const valueRg = /\s*"[^:]+:\s"?([^",{\[]+)/;
@@ -55,7 +56,7 @@ const file = readline.createInterface({
   terminal: false,
 });
 
-file.on('line', (line) => {
+file.on('line', line => {
   lineNum += 1;
 
   // Closing depth level

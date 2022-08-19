@@ -34,4 +34,11 @@ router
     userController.addChampionsXLSX,
   );
 
+router
+  .post(
+    '/champions/playable',
+    uploads.xlsx.single('xlsx'),
+    userController.playableChampionsXLSX,
+  )
+
 export default router;
