@@ -10,6 +10,7 @@ import routeURIs from './constants/routes.js';
 
 // DB init
 import sequelize from './services/sql/database.js';
+import redisClient from './services/redis/client.js';
 
 // Routes
 import userRoutes from './routes/user.js';

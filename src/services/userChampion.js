@@ -4,8 +4,7 @@ import xlsx from 'xlsx';
 import UserChampion from '../models/userChampion.js';
 import User from '../models/user.js';
 import Champion from '../models/sql/champion.js';
-import ChampionDAO from '../services/sql/champion.js';
-import riotAPI from '../helpers/riotAPI.js';
+import { getChampionsRotation } from '../services/mongo/champion.js';
 
 const findUserChampions = async (userId) => {
   const champions = await User.findAll({
@@ -51,21 +50,10 @@ const getChampionsXLSX = async userId => {
 
 const playableChampionsXLSX = async filePath => {
   const {
-    freeChampionIds,
-    freeChampionIdsForNewPlayers,
+    freeChampions,
+    freeChampionsForNewPlayers,
     maxNewPlayerLevel,
-  } = await riotAPI.getChampionsRotation();
-
-  const freeChampionNames = await Promise.all(freeChampionIds.map(
-    async key => {
-      const champion = await ChampionDAO.findByRemoteKey(key);
-      return champion.dataValues.name;
-    }));
-  const freeChampionNamesNew = await Promise.all(freeChampionIdsForNewPlayers.map(
-    async key => {
-      const champion = await ChampionDAO.findByRemoteKey(key);
-      return champion.dataValues.name;
-    }));
+  } = await getChampionsRotation();
 
   const file = xlsx.readFile(filePath);
   const sheet = file.Sheets[file.SheetNames[0]];
@@ -75,8 +63,8 @@ const playableChampionsXLSX = async filePath => {
     return {
       champion,
       available: level > maxNewPlayerLevel ?
-        freeChampionNames.includes(champion) :
-        freeChampionNamesNew.includes(champion)
+        freeChampions.includes(champion) :
+        freeChampionsForNewPlayers.includes(champion)
     };
   });
   const answersSheet = xlsx.utils.json_to_sheet(answers);
