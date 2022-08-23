@@ -1,13 +1,27 @@
-import UserDAO from '../services/user.js';
+import jwt from 'jsonwebtoken';
 
 const auth = (priviledges) => async (req, res, next) => {
   try {
-    const user = await UserDAO.findUser(req.session.user);
-    if (priviledges.includes(user.priviledges)) {
-      next();
-    } else {
-      res.json('User is not authorized');
+    const token = req.headers['authorization'];
+    if (token == null) {
+      return res.sendStatus(401);
     }
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+
+      if (priviledges.includes(user.priviledges)) {
+        console.log("Authorized!")
+        req.user = user;
+        return next();
+      }
+      console.log("NOT Authorized!")
+
+      res.json('User is not authorized');
+    });
+
   } catch (err) {
     next(err);
   }

@@ -1,7 +1,6 @@
 // Node modules
 import bodyParser from 'body-parser';
 import express from 'express';
-import session from 'express-session';
 import mongoose from 'mongoose';
 import 'dotenv/config';
 
@@ -24,12 +23,6 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  expires: new Date(Date.now() + 3600000),
-}));
 
 app.use(routeURIs.user, userRoutes);
 app.use(`/sql${routeURIs.champion}`, championSqlRoutes);

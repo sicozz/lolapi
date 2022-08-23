@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 import UserDAO from '../services/user.js';
 import UserChampionDAO from '../services/userChampion.js';
 import priviledges from '../helpers/priviledges.js';
@@ -15,8 +17,12 @@ const signin = async (req, res, next) => {
     const id = await UserDAO.create(user);
 
     if (id) {
-      req.session.user = id;
-      res.json('Signin successful');
+      // create jwt with user id and permissions
+      const jwtUser = { username, priviledges };
+      // jwt.sign(jwtUser, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' });
+      const accessToken = jwt.sign(jwtUser, process.env.ACCESS_TOKEN_SECRET);
+      console.log(`User: ${username}\nJWT: ${accessToken}`);
+      return res.json({ accessToken });
     } else {
       throw new Error('signin failed');
     }
@@ -31,11 +37,13 @@ const login = async (req, res, next) => {
     const passwd = req.body.password;
     const resp = await UserDAO.login({ username, passwd });
 
-    if (resp.success) {
-      req.session.user = resp.id;
-      res.json('Login successful');
+    if (resp) {
+      // jwt.sign(jwtUser, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' });
+      const accessToken = jwt.sign(resp, process.env.ACCESS_TOKEN_SECRET);
+      console.log(`User: ${username}\nJWT: ${accessToken}`);
+      return res.json({ accessToken });
     } else {
-      res.json('Wrong username or password');
+      return res.json('Wrong username or password');
     }
   } catch (err) {
     return next(err);
@@ -65,7 +73,7 @@ const deleteUser = async (req, res, next) => {
 
 const getChampions = async (req, res, next) => {
   try {
-    const userId = req.session.user;
+    const userId = req.user.id;
     const xlsxFileName = await UserChampionDAO.getChampionsXLSX(userId);
     return res.sendFile(xlsxFileName, { root: process.cwd() });
   } catch (err) {
@@ -78,7 +86,7 @@ const addChampionsXLSX = async (req, res, next) => {
     if (!req.file) {
       throw new Error('Excel could not be loaded');
     }
-    const userId = req.session.user;
+    const userId = req.user.id;
     const filePath = req.file.path;
     await UserChampionDAO.addChampionsXLSX(userId, filePath);
     return res.json("Champions added succesfully");

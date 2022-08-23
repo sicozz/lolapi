@@ -22,12 +22,12 @@ const create = async (user) => {
 const login = async (user) => {
   const dbUser = await User.findOne({ where: { username: user.username } });
   if (!dbUser) {
-    return { success: false };
+    return;
   }
   if (await bcrypt.compare(user.passwd, dbUser.passwd)) {
-    return { success: true, id: dbUser.id };
+    return { id: dbUser.id, priviledges: dbUser.priviledges };
   }
-  return { success: false };
+  return;
 };
 
 const updatePriviledges = async (id, priviledge) => {

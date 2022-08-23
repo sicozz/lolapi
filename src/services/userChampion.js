@@ -36,9 +36,11 @@ const addChampionsXLSX = async (userId, filePath) => {
 };
 
 const getChampionsXLSX = async userId => {
-  const championsData = await UserChampionDAO.findUserChampions(userId);
-  const champions = championsData[0]['Champions']
-    .map(champion => ({ Champion: champion.name }));
+  const championsData = await findUserChampions(userId);
+  const champions = championsData ?
+    [] :
+    championsData[0]['Champions']
+      .map(champion => ({ Champion: champion.name }));
 
   let workbook = xlsx.utils.book_new();
   const sheet = xlsx.utils.json_to_sheet(champions);

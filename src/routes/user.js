@@ -26,10 +26,12 @@ router
 router
   .get(
     '/champions',
+    auth([priviledges.rioter, priviledges.user]),
     userController.getChampions,
   )
   .post(
     '/champions',
+    auth([priviledges.rioter, priviledges.user]),
     uploads.xlsx.single('xlsx'),
     userController.addChampionsXLSX,
   );
@@ -37,6 +39,7 @@ router
 router
   .post(
     '/champions/playable',
+    auth([priviledges.rioter, priviledges.user]),
     uploads.xlsx.single('xlsx'),
     userController.playableChampionsXLSX,
   )
