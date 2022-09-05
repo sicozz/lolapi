@@ -13,12 +13,9 @@ const auth = (priviledges) => async (req, res, next) => {
       }
 
       if (priviledges.includes(user.priviledges)) {
-        console.log("Authorized!")
         req.user = user;
         return next();
       }
-      console.log("NOT Authorized!")
-
       res.json('User is not authorized');
     });
 

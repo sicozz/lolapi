@@ -21,7 +21,6 @@ const signin = async (req, res, next) => {
       const jwtUser = { username, priviledges };
       // jwt.sign(jwtUser, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' });
       const accessToken = jwt.sign(jwtUser, process.env.ACCESS_TOKEN_SECRET);
-      console.log(`User: ${username}\nJWT: ${accessToken}`);
       return res.json({ accessToken });
     } else {
       throw new Error('signin failed');
@@ -35,12 +34,11 @@ const login = async (req, res, next) => {
   try {
     const { username } = req.body;
     const passwd = req.body.password;
-    const resp = await UserDAO.login({ username, passwd });
+    const loginResp = await UserDAO.login({ username, passwd });
 
-    if (resp) {
+    if (loginResp) {
       // jwt.sign(jwtUser, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' });
-      const accessToken = jwt.sign(resp, process.env.ACCESS_TOKEN_SECRET);
-      console.log(`User: ${username}\nJWT: ${accessToken}`);
+      const accessToken = jwt.sign(loginResp, process.env.ACCESS_TOKEN_SECRET);
       return res.json({ accessToken });
     } else {
       return res.json('Wrong username or password');

@@ -45,36 +45,35 @@ export const getChampionsRotation = async () => {
   if (await championRotation.isCached()) {
     const rotation = await Rotation.findOne();
     return rotation;
-  } else {
-    await Rotation.deleteMany();
-    const {
-      freeChampionIds,
-      freeChampionIdsForNewPlayers,
-      maxNewPlayerLevel,
-    } = await riotAPI.getChampionsRotation();
-
-    const freeChampionNames = await Promise.all(freeChampionIds.map(
-      async key => {
-        const champion = await ChampionDAO.findByRemoteKey(key);
-        return champion.dataValues.name;
-      })
-    );
-    const freeChampionNamesNew = await Promise.all(freeChampionIdsForNewPlayers.map(
-      async key => {
-        const champion = await ChampionDAO.findByRemoteKey(key);
-        return champion.dataValues.name;
-      })
-    );
-    const data = {
-      freeChampions: freeChampionNames,
-      freeChampionsForNewPlayers: freeChampionNamesNew,
-      maxNewPlayerLevel,
-    };
-    const rotation = new Rotation(data);
-    await rotation.save();
-    championRotation.setCached();
-    return rotation;
   }
+  await Rotation.deleteMany();
+  const {
+    freeChampionIds,
+    freeChampionIdsForNewPlayers,
+    maxNewPlayerLevel,
+  } = await riotAPI.getChampionsRotation();
+
+  const freeChampionNames = await Promise.all(freeChampionIds.map(
+    async key => {
+      const champion = await ChampionDAO.findByRemoteKey(key);
+      return champion.dataValues.name;
+    })
+  );
+  const freeChampionNamesNew = await Promise.all(freeChampionIdsForNewPlayers.map(
+    async key => {
+      const champion = await ChampionDAO.findByRemoteKey(key);
+      return champion.dataValues.name;
+    })
+  );
+  const data = {
+    freeChampions: freeChampionNames,
+    freeChampionsForNewPlayers: freeChampionNamesNew,
+    maxNewPlayerLevel,
+  };
+  const rotation = new Rotation(data);
+  await rotation.save();
+  championRotation.setCached();
+  return rotation;
 };
 
 export default {

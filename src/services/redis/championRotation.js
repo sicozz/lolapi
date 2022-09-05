@@ -10,9 +10,12 @@ const isCached = () => {
       }
       if (data != null) {
         return resolve(true);
-      } else {
-        return resolve(false);
       }
+
+      return data != null ?
+        resolve(true) :
+        resolve(false)
+
     });
   });
 };
